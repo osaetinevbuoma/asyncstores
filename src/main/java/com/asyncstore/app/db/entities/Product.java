@@ -1,27 +1,14 @@
 package com.asyncstore.app.db.entities;
 
-import jakarta.persistence.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int productId;
+public class Product extends BaseEntity {
     private String name;
     private String description;
-
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 
     @OneToMany(targetEntity = Price.class, mappedBy = "product")
     private List<Price> prices;
@@ -32,10 +19,6 @@ public class Product {
     public Product(String name, String description) {
         this.name = name;
         this.description = description;
-    }
-
-    public int getProductId() {
-        return productId;
     }
 
     public String getName() {
@@ -54,22 +37,6 @@ public class Product {
         this.description = description;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     public List<Price> getPrices() {
         return prices;
     }
@@ -80,7 +47,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product[id=" + this.getProductId() + ", name=" + this.getName()
+        return "Product[id=" + this.getId() + ", name=" + this.getName()
                 + ", description=" + this.getDescription() + "]";
     }
 }

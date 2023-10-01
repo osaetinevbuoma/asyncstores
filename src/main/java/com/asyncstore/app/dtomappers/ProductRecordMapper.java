@@ -10,6 +10,6 @@ import java.util.function.Function;
 public class ProductRecordMapper implements Function<Product, ProductRecord> {
     @Override
     public ProductRecord apply(Product product) {
-        return new ProductRecord(product.getProductId(), product.getName(), product.getDescription());
+        return new ProductRecord(product.getId(), product.getName(), product.getDescription());
     }
 }

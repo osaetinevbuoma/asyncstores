@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
@@ -155,8 +156,14 @@ public class AsyncStoreService {
 
     @Async
     public CompletableFuture<ProductRecord> getProduct(int id) {
-        CompletableFuture<Product> product = this.productRepository.findByProductId(id);
-        return product.thenApply(productRecordMapper);
+        Optional<Product> product = this.productRepository.findById(id);
+        if (product.isEmpty()) {
+            return CompletableFuture.completedFuture(null);
+        }
+
+        CompletableFuture<Product> productCompletableFuture = CompletableFuture
+                .completedFuture(product.get());
+        return productCompletableFuture.thenApply(productRecordMapper);
     }
 
     @Async
@@ -177,7 +184,7 @@ public class AsyncStoreService {
             CompletableFuture<Price> price = this.priceRepository.findByStoreAndProduct(store, product);
             price.thenAcceptAsync(v -> productInfoRecords.add(
                     new ProductInfoRecord(
-                            product.getProductId(),
+                            product.getId(),
                             product.getName(),
                             product.getDescription(),
                             price.join().getPrice(),
@@ -192,7 +199,13 @@ public class AsyncStoreService {
 
     @Async
     public CompletableFuture<StoreRecord> getStore(int id) {
-        CompletableFuture<Store> store = this.storeRepository.findByStoreId(id);
-        return store.thenApply(storeRecordMapper);
+        Optional<Store> store = this.storeRepository.findById(id);
+        if (store.isEmpty()) {
+            return CompletableFuture.completedFuture(null);
+        }
+
+        CompletableFuture<Store> storeCompletableFuture = CompletableFuture
+                .completedFuture(store.get());
+        return storeCompletableFuture.thenApply(storeRecordMapper);
     }
 }

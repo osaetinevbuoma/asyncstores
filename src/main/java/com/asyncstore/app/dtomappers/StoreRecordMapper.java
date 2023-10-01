@@ -10,6 +10,6 @@ import java.util.function.Function;
 public class StoreRecordMapper implements Function<Store, StoreRecord> {
     @Override
     public StoreRecord apply(Store store) {
-        return new StoreRecord(store.getStoreId(), store.getStoreName(), store.getStoreAddress());
+        return new StoreRecord(store.getId(), store.getStoreName(), store.getStoreAddress());
     }
 }
